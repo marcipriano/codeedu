@@ -53,8 +53,10 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $c = $this->show($id);
-        return $c->fill($request->all())->save();
+        
+        $client = $this->show($id);
+        $client->fill($request->all())->save();
+        return [$client];
     }
 
     /**
