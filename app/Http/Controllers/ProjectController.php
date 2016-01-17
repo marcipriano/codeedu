@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Repositories\ClientRepository as ClientRepository;
-use App\Services\ClientService as ClientService;
+use App\Repositories\ProjectRepository as ProjectRepository;
+use App\Services\ProjectService as ProjectService;
 
-class ClientController extends Controller
+class ProjectController extends Controller
 {
-    
     private $repository;
     private $service;
 
-    public function __construct(ClientRepository $repository, ClientService $service)
+    public function __construct(ProjectRepository $repository, ProjectService $service)
     {
         $this->repository = $repository;
         $this->service = $service;
@@ -30,8 +29,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $c = $this->repository->all();
-        return $c;
+        return $project = $this->repository->all();
     }
 
     /**
@@ -53,8 +51,7 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $c = $this->repository->find($id);
-        return $c;
+        return $project = $this->repository->findRelations($id);
     }
 
     /**
@@ -66,7 +63,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-       return $client = $this->service->update($request->all(), $id);
+       return $project = $this->service->update($request->all(), $id);
     }
 
     /**
