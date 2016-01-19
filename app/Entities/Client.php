@@ -23,7 +23,7 @@ class Client extends Model
 
     public function project()
     {
-        return $this->hasMany('App\Entities\Project');
+        return $this->hasMany(Project::class);
     }
     
 }

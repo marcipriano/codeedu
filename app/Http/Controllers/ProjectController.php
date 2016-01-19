@@ -51,6 +51,10 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+        if ($this->checkProjectPermission($id) == false){
+            return ['error' => 'Access forbidden'];
+        }
+        
         return $project = $this->repository->findRelations($id);
     }
 
@@ -63,7 +67,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-       return $project = $this->service->update($request->all(), $id);
+        if ($this->checkProjectPermission($id) == false){
+            return ['error' => 'Access forbidden'];
+        }
+
+        return $project = $this->service->update($request->all(), $id);
     }
 
     /**
@@ -74,7 +82,35 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
+        if ($this->checkProjectPermission($id) == false){
+            return ['error' => 'Access forbidden'];
+        }
+
         return $this->repository->delete($id);
     }
 
+    private function checkProjectOwner($projectId)
+    {
+        $userId = \Authorizer::getResourceOwnerId();
+       
+        return $this->repository->isOwner($projectId, $userId);
+        
+    }
+
+    private function checkProjectMember($projectId)
+    {
+        $userId = \Authorizer::getResourceOwnerId();
+       
+        return $this->repository->hasMember($projectId, $userId);
+        
+    }
+
+    private function checkProjectPermission($projectId)
+    {
+        if ($this->checkProjectOwner($projectId) or $this->checkProjectMember($projectId)){
+            return true;
+        }
+
+        return false;
+    }
 }
