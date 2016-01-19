@@ -55,7 +55,8 @@ class ProjectController extends Controller
             return ['error' => 'Access forbidden'];
         }
         
-        return $project = $this->repository->findRelations($id);
+        //return $project = $this->repository->findRelations($id);
+        return $project = $this->repository->find($id);
     }
 
     /**
