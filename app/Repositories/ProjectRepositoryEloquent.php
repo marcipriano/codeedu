@@ -33,7 +33,7 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
 
     public function findRelations($id)
     {
-        return $project = $this->model->with(['owner', 'client', 'notes'])->find($id);
+        return $project = $this->model->with(['owner', 'client', 'notes', 'members'])->find($id);
 
     }
 
