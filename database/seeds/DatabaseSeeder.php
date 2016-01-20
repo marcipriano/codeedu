@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
+        
+        $this->call(OAuthClientSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(ClienteTableSeeder::class);
         $this->call(ProjectTableSeeder::class);

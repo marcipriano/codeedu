@@ -11,6 +11,14 @@
 |
 */
 
+$factory->define(App\Entities\OAuthClient::class, function (Faker\Generator $faker) {
+    return [
+        'id' => bcrypt(str_random(10)),
+        'name' => $faker->name,
+        'secret' => bcrypt(str_random(10))
+    ];
+});
+
 $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
