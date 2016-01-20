@@ -33,7 +33,7 @@ $factory->define(App\Entities\Client::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Entities\Project::class, function (Faker\Generator $faker) {
     return [
-        'owner_id' => rand(1, 10),
+        'owner_id' => rand(1, 11),
         'client_id' => rand(1, 10),
         'name' => $faker->word,
         'description' => $faker->sentence,

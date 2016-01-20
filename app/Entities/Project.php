@@ -5,11 +5,9 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model implements Transformable
 {
-    use SoftDeletes;
     use TransformableTrait;
 
     protected $fillable = [
@@ -37,6 +35,10 @@ class Project extends Model implements Transformable
         return $this->belongsTo(Client::class, 'client_id');
     }
 
+    public function files()
+    {
+        return $this->hasMany(ProjectFile::class);
+    }
 
     public function notes()
     {

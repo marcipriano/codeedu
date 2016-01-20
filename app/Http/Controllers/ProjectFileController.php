@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\ProjectRepository as ProjectRepository;
 use App\Services\ProjectService as ProjectService;
 
-class ProjectController extends Controller
+class ProjectFileController extends Controller
 {
     private $repository;
     private $service;
@@ -29,7 +29,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return $project = $this->repository->with(['owner', 'client'])->all();
+        return $project = $this->repository->all();
     }
 
     /**
@@ -40,7 +40,17 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->service->create($request->all());
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+
+        $data['file'] = $file;
+        $data['extension'] = $extension;
+        $data['name'] = $request->name;
+        $data['description'] = $request->description;
+        $data['project_id'] = $request->id;
+        //dd($data);
+        $this->service->createFile($data);
+        
     }
 
     /**

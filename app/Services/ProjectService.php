@@ -6,6 +6,8 @@
 use App\Repositories\ProjectRepository;
 use App\Validators\ProjectValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
+use \Illuminate\Filesystem\Filesystem;
+use \Illuminate\Contracts\Filesystem\Factory as Storage;
 
 	class ProjectService
 	{
@@ -19,10 +21,21 @@ use \Prettus\Validator\Exceptions\ValidatorException;
 		*/
 		protected $validator;
 
-		function __construct(ProjectRepository $repository, ProjectValidator $validator)
+		private $filesystem;
+
+		private $storage;
+
+		function __construct(
+					ProjectRepository $repository, 
+					ProjectValidator $validator,
+					Filesystem $filesystem,
+					Storage $storage)
 		{
 			$this->repository = $repository;
 			$this->validator = $validator;
+			$this->filesystem = $filesystem;
+			$this->storage = $storage;
+
 		}
 	
 		public function create(array $data)
@@ -52,6 +65,20 @@ use \Prettus\Validator\Exceptions\ValidatorException;
 					'message' => $e->getMessageBag()
 				];
 			}
+		}
+
+		public function createFile(array $data)
+		{
+			/*
+			* name
+			* extension
+			* file
+			*/
+			$project = $this->repository->skipPresenter()->find($data['project_id']);
+			$projectFile = $project->files()->create($data);
+
+        $this->storage->put($projectFile->name.'.'.$data['extension'], $this->filesystem->get($data['file']));
+		
 		}
 	}
 

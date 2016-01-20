@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectNotesTable extends Migration
+class AddProjectIdInProjectFileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,9 @@ class CreateProjectNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_notes', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::table('project_files', function (Blueprint $table) {
             $table->integer('project_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->string('title', 150);
-            $table->text('note');
-            $table->timestamps();
         });
     }
 
@@ -29,6 +25,8 @@ class CreateProjectNotesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('project_notes');
+        Schema::table('project_files', function (Blueprint $table) {
+            $table->dropForeign('project_files_project_id_foreign');
+        });
     }
 }
