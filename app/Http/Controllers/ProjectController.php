@@ -51,10 +51,12 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+        /*
         if ($this->checkProjectPermission($id) == false){
             return ['error' => 'Access forbidden'];
         }
-        
+        */
+
         //return $project = $this->repository->findRelations($id);
         return $project = $this->repository->find($id);
     }
@@ -68,9 +70,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        /*
         if ($this->checkProjectPermission($id) == false){
             return ['error' => 'Access forbidden'];
         }
+        */
 
         return $project = $this->service->update($request->all(), $id);
     }
@@ -83,10 +87,12 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
+        /*
         if ($this->checkProjectPermission($id) == false){
             return ['error' => 'Access forbidden'];
         }
-
+        */
+        
         return $this->repository->delete($id);
     }
 
