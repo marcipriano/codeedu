@@ -61,9 +61,6 @@ class ProjectFileController extends Controller
      */
     public function show($id)
     {
-        if ($this->checkProjectPermission($id) == false){
-            return ['error' => 'Access forbidden'];
-        }
         
         //return $project = $this->repository->findRelations($id);
         return $project = $this->repository->find($id);

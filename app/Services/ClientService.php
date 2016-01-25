@@ -48,8 +48,17 @@ use \Prettus\Validator\Exceptions\ValidatorException;
 		{
 			try {
 				$this->validator->with($data)->passesOrFail();
-				return $this->repository->update($data, $id);
 				
+		        try {
+		            $client = $this->repository->update($data, $id);
+
+		        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+		            // something went wrong
+		            return ['error' => 'Cliente nao localizado'];
+		        }
+
+		        return $client;
+
 			} catch (ValidatorException $e) {
 				return [
 					'error' => true,

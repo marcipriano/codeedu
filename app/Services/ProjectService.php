@@ -57,7 +57,16 @@ use \Illuminate\Contracts\Filesystem\Factory as Storage;
 
 			try {
 				$this->validator->with($data)->passesOrFail();
-				return $this->repository->update($data, $id);
+				
+		        try {
+		            $project = $this->repository->update($data, $id);
+
+		        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+		            // something went wrong
+		            return ['error' => 'Projeto nao localizado'];
+		        }
+
+		        return $project;
 				
 			} catch (ValidatorException $e) {
 				return [

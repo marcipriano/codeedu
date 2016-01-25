@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\ProjectRepository as ProjectRepository;
 use App\Services\ProjectService as ProjectService;
+use App\Entities\Project;
 
 class ProjectController extends Controller
 {
@@ -50,13 +51,26 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        if ($this->checkProjectPermission($id) == false){
+    {/*
+        $p = $this->checkProjectPermission($id);
+        if ($p == false){
             return ['error' => 'Access forbidden'];
         }
-        
+        if ($p == 'nlocalizado'){
+            return ['error' => 'Nao Localizado'];
+        }
+        */
         //return $project = $this->repository->findRelations($id);
-        return $project = $this->repository->find($id);
+       
+        try {
+        $project = $this->repository->with(['owner', 'client', 'notes', 'files'])->find($id);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // something went wrong
+            return ['error' => 'Projeto nao localizado'];
+        }
+
+        return $project;
     }
 
     /**
@@ -67,12 +81,9 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        if ($this->checkProjectPermission($id) == false){
-            return ['error' => 'Access forbidden'];
-        }
-
+    {   
         return $project = $this->service->update($request->all(), $id);
+
     }
 
     /**
@@ -83,27 +94,46 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->checkProjectPermission($id) == false){
-            return ['error' => 'Access forbidden'];
+       try {
+            $project = $this->repository->delete($id);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // something went wrong
+            return ['error' => 'Projeto nao localizado'];
         }
 
-        return $this->repository->delete($id);
+        return $project;
     }
 
     private function checkProjectOwner($projectId)
     {
         $userId = \Authorizer::getResourceOwnerId();
        
-        return $this->repository->isOwner($projectId, $userId);
+        try {
+            $owner = $this->repository->isOwner($projectId, $userId);
         
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // something went wrong
+            return 'nlocalizado';
+        }
+
+        return $owner;
     }
 
     private function checkProjectMember($projectId)
     {
         $userId = \Authorizer::getResourceOwnerId();
        
-        return $this->repository->hasMember($projectId, $userId);
         
+        try {
+            $member =  $this->repository->hasMember($projectId, $userId);
+        
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // something went wrong
+            return 'nlocalizado';
+        }
+
+        return $member;
     }
 
     private function checkProjectPermission($projectId)

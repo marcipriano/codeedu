@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Repositories\ProjectRepository;
 use App\Repositories\ClientRepository as ClientRepository;
 use App\Services\ClientService as ClientService;
 
@@ -14,11 +15,16 @@ class ClientController extends Controller
     
     private $repository;
     private $service;
+    private $projectRepository;
 
-    public function __construct(ClientRepository $repository, ClientService $service)
+    public function __construct(
+                ClientRepository $repository, 
+                ClientService $service, 
+                ProjectRepository $projectRepository)
     {
         $this->repository = $repository;
         $this->service = $service;
+        $this->projectRepository = $projectRepository;
     }
     
 
@@ -53,7 +59,14 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $c = $this->repository->find($id);
+        try {
+            $c = $this->repository->find($id);
+        
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // something went wrong
+            return ['error' => 'Cliente nao localizado'];
+        }
+
         return $c;
     }
 
@@ -77,7 +90,35 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        return $this->repository->delete($id);
+        
+        
+        try {
+            $c = $this->repository->find($id);
+            foreach ($c->project as $pro) {
+                //apagar notas
+                $this->projectRepository->find($pro->id)->notes->each(function ($note) {
+                   $note->delete();
+                });
+                //apagar files
+                $this->projectRepository->find($pro->id)->files->each(function ($file) {
+                   $file->delete();
+                });
+                //apagar projetos
+                $this->repository->find($id)->project->each(function ($project) {
+                   $project->delete();
+                });
+
+            }
+            //apagar cliente
+            $c->delete();
+            
+            return 'true';
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // something went wrong
+            return ['error' => 'Cliente nao localizado'];
+        }
+        
     }
 
 }
