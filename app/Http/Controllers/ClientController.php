@@ -94,13 +94,14 @@ class ClientController extends Controller
         
         try {
             $c = $this->repository->find($id);
-            foreach ($c->project as $pro) {
+            /*
+            foreach ($c->project as $project) {
                 //apagar notas
-                $this->projectRepository->find($pro->id)->notes->each(function ($note) {
+                $this->projectRepository->find($project->id)->notes->each(function ($note) {
                    $note->delete();
                 });
                 //apagar files
-                $this->projectRepository->find($pro->id)->files->each(function ($file) {
+                $this->projectRepository->find($project->id)->files->each(function ($file) {
                    $file->delete();
                 });
                 //apagar projetos
@@ -109,9 +110,16 @@ class ClientController extends Controller
                 });
 
             }
-            //apagar cliente
-            $c->delete();
-            
+            */
+
+            try {
+                //apagar cliente
+                $c->delete();
+                
+            } catch (\Illuminate\Database\QueryException  $e) {
+                // something went wrong
+                return ['error' => "Existem projetos vinculados ao cliente. Antes de apagar o cliente, exclua os projetos vinculados ao mesmo!"];
+            }
             return 'true';
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
