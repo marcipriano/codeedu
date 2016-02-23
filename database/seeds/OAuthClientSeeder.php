@@ -17,6 +17,8 @@ class OAuthClientSeeder extends Seeder
             'secret' => "secret",
             'name' => "laravelApp"
         ]);
+        
+        factory(\App\Entities\OAuthClient::class, 10)->create();
                 
     }
 }

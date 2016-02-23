@@ -63,7 +63,7 @@ class ProjectController extends Controller
         //return $project = $this->repository->findRelations($id);
        
         try {
-        $project = $this->repository->with(['owner', 'client', 'notes', 'files'])->find($id);
+        $project = $this->repository->with(['owner', 'client', 'members', 'tasks', 'notes', 'files'])->find($id);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // something went wrong

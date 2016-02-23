@@ -43,7 +43,7 @@ $factory->define(App\Entities\Project::class, function (Faker\Generator $faker) 
     return [
         'owner_id' => rand(1, 11),
         'client_id' => rand(1, 10),
-        'name' => $faker->word,
+        'name' => $faker->sentence($nbWords = 6, $variableNbWords = true),
         'description' => $faker->sentence,
         'progress' => rand(1, 100),
         'status' => rand(1, 3),
@@ -54,7 +54,24 @@ $factory->define(App\Entities\Project::class, function (Faker\Generator $faker) 
 $factory->define(App\Entities\ProjectNote::class, function (Faker\Generator $faker) {
     return [
         'project_id' => rand(1, 10),
-        'title' => $faker->word,
+        'title' => $faker->sentence($nbWords = 3, $variableNbWords = true),
         'note' => $faker->paragraph,
+    ];
+});
+
+$factory->define(App\Entities\ProjectTask::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->sentence($nbWords = 3, $variableNbWords = true),
+        'project_id' => rand(1, 10),
+        'start_date' => $faker->dateTime('now'),
+        'due_date' => $faker->dateTime('+5 week'),
+        'status' => rand(1, 3),
+    ];
+});
+
+$factory->define(App\Entities\ProjectMember::class, function (Faker\Generator $faker) {
+    return [
+        'project_id' => rand(1, 10),
+        'member_id' => rand(1, 10),
     ];
 });

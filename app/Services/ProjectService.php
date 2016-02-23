@@ -4,8 +4,10 @@
 
 
 use App\Repositories\ProjectRepository;
+use App\Repositories\ProjectMemberRepository;
 use App\Validators\ProjectValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Illuminate\Filesystem\Filesystem;
 use \Illuminate\Contracts\Filesystem\Factory as Storage;
 
@@ -15,6 +17,11 @@ use \Illuminate\Contracts\Filesystem\Factory as Storage;
 		* @var ProjectRepository
 		*/
 		protected $repository;
+
+		/**
+		* @var ProjectTaskRepository
+		*/
+		protected $repositoryMember;
 		
 		/**
 		* @var validator
@@ -27,11 +34,13 @@ use \Illuminate\Contracts\Filesystem\Factory as Storage;
 
 		function __construct(
 					ProjectRepository $repository, 
+					ProjectMemberRepository $repositoryMember, 
 					ProjectValidator $validator,
 					Filesystem $filesystem,
 					Storage $storage)
 		{
 			$this->repository = $repository;
+			$this->repositoryMember = $repositoryMember;
 			$this->validator = $validator;
 			$this->filesystem = $filesystem;
 			$this->storage = $storage;
@@ -89,6 +98,41 @@ use \Illuminate\Contracts\Filesystem\Factory as Storage;
         $this->storage->put($projectFile->name.'.'.$data['extension'], $this->filesystem->get($data['file']));
 		
 		}
+
+		public function addMember(array $data)
+		{
+			return $this->repositoryMember->create($data);
+		}
+
+		public function removeMember($memberId)
+		{
+			try {
+				$r = $this->repositoryMember->delete($memberId);
+				/*
+				*	aqui pra mim so da certo se eu retornar entre [$r]. se eu tentar da
+				*	o return direto no this ou mesmo na variavel como esta abaixo da o erro
+				*	"The Response content must be a string or object implementing __toString(), "boolean""	
+				*	vc vem reclamando nas ultimas vezes sobre o retorno entre [] como posso evitar esse erro?
+				*/
+
+				//return [$r];
+				
+			} catch (ModelNotFoundException $e) {
+				return [
+					'error' => true,
+					'message' => 'membro nao localizado'
+				];
+			}
+
+			return 'true';
+
+		}
+
+	    public function isMember($projectId, $memberId)
+	    {
+	        return $this->repository->hasMember($projectId, $memberId);
+	    }
+
 	}
 
 
