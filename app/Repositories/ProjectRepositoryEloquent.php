@@ -14,6 +14,7 @@ use App\Presenters\ProjectPresenter;
  */
 class ProjectRepositoryEloquent extends BaseRepository implements ProjectRepository
 {
+
     /**
      * Specify Model class name
      *
@@ -35,6 +36,24 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
     public function findRelations($id)
     {
         return $project = $this->model->with(['owner', 'client', 'notes', 'members'])->find($id);
+
+    }
+
+    public function modelAll()
+    {
+        /*
+        return $project = \DB::connection('mysql2')
+                ->table('projects')
+                ->with(['owner', 'client'])
+                ->get();
+        //$this->model->connection('mysql2')->with(['owner', 'client'])->all();
+        */
+        $someModel = new Project;
+        $someModel->setConnection('mysql2');
+        //return $p = $someModel->with(['owner', 'client'])->find(1);
+        return $p = $someModel->all();
+
+        //$this->model->connection('mysql2')->with(['owner', 'client'])->all();
 
     }
 

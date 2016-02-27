@@ -15,6 +15,14 @@ class ProjectController extends Controller
     private $repository;
     private $service;
 
+    /**
+     * Specify connection
+     *
+     * @return string
+     */
+     //protected $connection = 'mysql2';
+
+
     public function __construct(ProjectRepository $repository, ProjectService $service)
     {
         $this->repository = $repository;
@@ -30,7 +38,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return $project = $this->repository->with(['owner', 'client'])->all();
+        //$this->setConnection('mysql2');
+
+        return $project = $this->repository->with(['owner', 'client'])->modelAll();
     }
 
     /**
