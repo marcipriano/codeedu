@@ -1,0 +1,51 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="panel panel-default">
+				<div class="panel-heading">Login</div>
+				<div class="panel-body">
+					<div class="alert alert-danger" ng-show="error.error">
+						<strong>Whoops!</strong> Um erro aconteceu ao efetuar o login:<br>
+						<p>{{ error.message }}</p>
+
+					</div>
+
+					<form class="form-horizontal" name="formLogin" role="form" method="POST" ng-submit="login()" novalidate>
+						<div class="form-group" ng-class="{'has-error': !formLogin.username.$valid && formLogin.username.$touched}">
+							<label class="col-md-4 control-label">E-Mail Address</label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" name="username" ng-model="user.username" required>
+								<div ng-messages="formLogin.username.$error" ng-show="formLogin.username.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formLogin.password.$valid && formLogin.password.$touched}">
+							<label class="col-md-4 control-label">Password</label>
+							<div class="col-md-6">
+								<input type="password" class="form-control" name="password" ng-model="user.password" required>
+								<div ng-messages="formLogin.password.$error" ng-show="formLogin.password.$touched">
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-6 col-md-offset-4">
+								<button type="submit" class="btn btn-primary" ng-disabled="formLogin.$invalid">
+									<i class="glyphicon glyphicon-sign-in"></i>
+									Entrar!
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
