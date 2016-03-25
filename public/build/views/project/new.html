@@ -1,0 +1,207 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3>
+						Projects
+					</h3>
+				</div>
+				<div class="panel-body">
+					
+					<form class="form-horizontal" name="formProject" role="form" method="POST" ng-submit="save()" novalidate>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.name.$valid && formProject.name.$touched}">
+							<label class="col-md-3 control-label">Name: </label>
+							<div class="col-md-9">
+								<input type="text" 
+									   class="form-control" 
+									   name="name" 
+									   ng-model="project.name" 
+									   required 
+							           ng-minlength="10"
+							           ng-maxlength="150" />
+
+								<div ng-messages="formProject.name.$error" 
+									 ng-show="formProject.name.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message when="minlength, maxlength" 
+									   class="help-block">
+										Campo com min. de 10 e max. 150 caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.description.$valid && formProject.description.$touched}">
+							<label class="col-md-3 control-label">Description: </label>
+							<div class="col-md-9">
+								<textarea class="form-control" name="description" ng-model="project.description" required></textarea> 
+								<div ng-messages="formProject.description.$error" ng-show="formProject.description.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.due_date.$valid && formProject.due_date.$touched}">
+							<label class="col-md-3 control-label">Due Date: </label>
+							<div class="col-md-9">
+						        <p class="input-group">
+						          <input 
+						          		type="text" 
+						          		class="form-control" 
+						          		datepicker-popup="dd/MM/yyyy" 
+						          		ng-model="project.due_date" 
+						          		is-open="due_date.status.opened" 
+						          		ng-required="true" 
+						          		close-text="Close" 
+										name="due_date" 
+						          		alt-input-formats="altInputFormats" />
+						          <span class="input-group-btn">
+						            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						          </span>
+						        </p>
+								<div ng-messages="formProject.due_date.$error" 
+									 ng-show="formProject.due_date.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message="date" class="help-block">
+										Data Invalida!
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.progress.$valid && formProject.progress.$touched}">
+							<label class="col-md-3 control-label">Progress: </label>
+							<div class="col-md-9">
+								<input type="number" 
+									   class="form-control" 
+									   name="progress" 
+									   ng-model="project.progress" 
+									   required  
+									   min="0"
+									   max="100"/>
+
+								<div ng-messages="formProject.progress.$error" 
+									 ng-show="formProject.progress.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message="min, max" class="help-block">
+										Numero de 0 a 100
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.client_id.$valid && formProject.client_id.$touched}">
+							<label class="col-md-3 control-label">Client: </label>
+							<div class="col-md-9">
+
+								<input type="text" 
+									   class="form-control" 
+									   name="client_id" 
+									   ng-model="clientSelected" 
+									   typeahead="c as c.name for c in getClients($viewValue)"
+									   typeahead-input-formatter="formatName($model)"
+									   typeahead-on-select="selectClient($item)"
+									   typeahead-editable="false"
+									   required />
+							<!-- 
+								<select class="form-control" 
+									   	name="client_id" 
+									   	ng-model="project.client_id"
+									   	ng-options="c.id as c.name for c in clients" 
+									   	required >
+									   	<option value=""> Select Client</option>
+
+								</select> 
+							-->
+
+								<div ng-messages="formProject.client_id.$error" 
+									 ng-show="formProject.client_id.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message="editable" 
+									   class="help-block">
+										Selecione um client valido
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.owner_id.$valid && formProject.owner_id.$touched}">
+							<label class="col-md-3 control-label">Owner: </label>
+							<div class="col-md-9">
+								<select class="form-control" 
+									   	name="owner_id" 
+									   	ng-model="project.owner_id"
+									   	ng-options="own.id as own.name for own in users" 
+									   	required >
+									   	<option value=""> Select Owner</option>
+
+								</select>
+
+								<div ng-messages="formProject.owner_id.$error" 
+									 ng-show="formProject.owner_id.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message when="minlength, maxlength" 
+									   class="help-block">
+										Campo com min. de 10 e max. 150 caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProject.status.$valid && formProject.status.$touched}">
+							<label class="col-md-3 control-label">Status: </label>
+							<div class="col-md-9">
+								<select class="form-control" 
+									   	name="status" 
+									   	ng-model="project.status"
+									   	ng-options="s.value as s.label for s in status"required >
+									   	<option value=""> Select Status</option>
+
+								</select>
+
+								<div ng-messages="formProject.status.$error" 
+									 ng-show="formProject.status.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message when="minlength, maxlength" 
+									   class="help-block">
+										Campo com min. de 10 e max. 150 caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-md-9 col-md-offset-4">
+								<a ng-href="#/projects" class="btn btn-primary">
+									<i class="glyphicon glyphicon-arrow-left"></i>
+									Voltar
+								</a>
+								<button type="submit" class="btn btn-success" ng-disabled="formProject.$invalid">
+									<i class="glyphicon glyphicon-ok"></i>
+									Salvar
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

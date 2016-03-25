@@ -6,12 +6,13 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\ProjectNoteRepository;
 use App\Entities\ProjectNote;
+use App\Presenters\ProjectNotePresenter;
 
 /**
  * Class ProjectNoteRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class ProjectNoteRepositoryEloquent extends BaseRepository implements ProjectNoteRepository
+class ProjectFileRepositoryEloquent extends BaseRepository implements ProjectNoteRepository
 {
     /**
      * Specify Model class name
@@ -30,4 +31,10 @@ class ProjectNoteRepositoryEloquent extends BaseRepository implements ProjectNot
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+    public function presenter()
+    {
+        return ProjectNotePresenter::class;
+    }
+
 }

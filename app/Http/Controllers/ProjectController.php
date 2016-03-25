@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Repositories\ProjectRepository as ProjectRepository;
 use App\Services\ProjectService as ProjectService;
 use App\Entities\Project;
@@ -40,7 +41,7 @@ class ProjectController extends Controller
     {
         //$this->setConnection('mysql2');
 
-        return $project = $this->repository->with(['owner', 'client'])->modelAll();
+        return $project = $this->repository->with(['owner', 'client'])->All();
     }
 
     /**
@@ -61,21 +62,15 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {/*
-        $p = $this->checkProjectPermission($id);
-        if ($p == false){
-            return ['error' => 'Access forbidden'];
+    {
+        if ($this->service->checkProjectPermission($id) == false) {
+            return ['error' => 'Access Forbindden'];
         }
-        if ($p == 'nlocalizado'){
-            return ['error' => 'Nao Localizado'];
-        }
-        */
-        //return $project = $this->repository->findRelations($id);
-       
+
         try {
         $project = $this->repository->with(['owner', 'client', 'members', 'tasks', 'notes', 'files'])->find($id);
 
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             // something went wrong
             return ['error' => 'Projeto nao localizado'];
         }
@@ -92,6 +87,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {   
+        if ($this->service->checkProjectPermission($id) === false) {
+            return ['error' => 'Access Forbindden'];
+        }
+
         return $project = $this->service->update($request->all(), $id);
 
     }
@@ -104,54 +103,19 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-       try {
+        if ($this->service->checkProjectPermission($id) === false) {
+            return ['error' => 'Access Forbindden'];
+        }
+
+        try {
             $project = $this->repository->delete($id);
 
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             // something went wrong
             return ['error' => 'Projeto nao localizado'];
         }
 
-        return $project;
+        return [$project];
     }
 
-    private function checkProjectOwner($projectId)
-    {
-        $userId = \Authorizer::getResourceOwnerId();
-       
-        try {
-            $owner = $this->repository->isOwner($projectId, $userId);
-        
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // something went wrong
-            return 'nlocalizado';
-        }
-
-        return $owner;
-    }
-
-    private function checkProjectMember($projectId)
-    {
-        $userId = \Authorizer::getResourceOwnerId();
-       
-        
-        try {
-            $member =  $this->repository->hasMember($projectId, $userId);
-        
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // something went wrong
-            return 'nlocalizado';
-        }
-
-        return $member;
-    }
-
-    private function checkProjectPermission($projectId)
-    {
-        if ($this->checkProjectOwner($projectId) or $this->checkProjectMember($projectId)){
-            return true;
-        }
-
-        return false;
-    }
 }

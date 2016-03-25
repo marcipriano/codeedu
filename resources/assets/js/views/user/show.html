@@ -1,0 +1,120 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-default">
+				<div class="panel-heading">Edit CLients</div>
+				<div class="panel-body">
+					
+					<form class="form-horizontal" name="formClient" role="form" method="POST" ng-submit="save()" novalidate>
+						<div class="form-group" ng-class="{'has-error': !formClient.name.$valid && formClient.name.$touched}">
+							<label class="col-md-3 control-label">Nome: </label>
+							<div class="col-md-9">
+								<input type="text" 
+									   class="form-control" disabled 
+									   name="name" 
+									   ng-model="client.name" 
+									   required 
+							           ng-minlength="10"
+							           ng-maxlength="150" />
+
+								<div ng-messages="formClient.name.$error" 
+									 ng-show="formClient.name.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message when="minlength, maxlength" 
+									   class="help-block">
+										Campo com min. de 10 e max. 150 caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formClient.responsible.$valid && formClient.responsible.$touched}">
+							<label class="col-md-3 control-label">Responsavel: </label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" disabled name="responsible" ng-model="client.responsible" required>
+								<div ng-messages="formClient.responsible.$error" ng-show="formClient.responsible.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formClient.email.$valid && formClient.email.$touched}">
+							<label class="col-md-3 control-label">E-mail: </label>
+							<div class="col-md-9">
+								<input type="email" 
+									   class="form-control" disabled 
+									   name="email" 
+									   ng-model="client.email"
+							           required />
+								<div ng-messages="formClient.email.$error" 
+									 ng-show="formClient.email.$touched"> 
+									<p ng-message when="required, email" 
+									   class="help-block">
+										Campo Obrigatrio no formato de email
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formClient.phone.$valid && formClient.phone.$touched}">
+							<label class="col-md-3 control-label">Phone: </label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" disabled name="phone" ng-model="client.phone" required>
+								<div ng-messages="formClient.phone.$error" ng-show="formClient.phone.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formClient.address.$valid && formClient.address.$touched}">
+							<label class="col-md-3 control-label">Address: </label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" disabled name="address" ng-model="client.address" required>
+								<div ng-messages="formClient.address.$error" ng-show="formClient.address.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formClient.address.$valid && formClient.address.$touched}">
+							<label class="col-md-3 control-label">Observaçoes: </label>
+							<div class="col-md-9">
+								<textarea class="form-control" disabled name="obs" ng-model="client.obs" required></textarea> 
+								<div ng-messages="formClient.obs.$error" ng-show="formClient.obs.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-9 col-md-offset-4">
+								<a ng-href="#/clients" class="btn btn-primary">
+									<i class="glyphicon glyphicon-sign-in"></i>
+									Voltar
+								</a>
+								<a ng-href="#/clients/{{client.id}}/edit" class="btn btn-warning">
+									<i class="glyphicon glyphicon-sign-in"></i>
+									Editar
+								</a>
+								<button class="btn btn-danger" ng-click="remove()">
+									<i class="glyphicon glyphicon-sign-in"></i>
+									Excluir
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

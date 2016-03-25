@@ -1,0 +1,51 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-default">
+				<div class="panel-heading">Exclussao de project</div>
+				<div class="panel-body">
+					<p>Realmente deseja excluir esse project?</p>
+					<ul>
+						<li>Nome: {{ project.name }}</li>
+						<li>Client: {{ project.client.data.name }}</li>
+						<li>Owner: {{ project.owner.data.name }}</li>
+					</ul>
+					<br>
+					<div>
+					<p>Ao excluir o projecte voce tambem estara excluindos os itens abaixo que estao vinculados ao mesmo:</p>
+					<ul>
+						<li>
+							Membros:
+							<span class="badge">{{project.members.data.length}}</span>
+						</li>
+						<li>
+							Tasks: 
+							<span class="badge">{{ project.tasks.data.length }}</span>
+						</li>
+						<li>
+							Notes: 
+							<span class="badge">{{ project.notes.data.length }}</span>
+						</li>
+						<li>
+							Files: 
+							<span class="badge">{{ project.files.data.length }}</span>
+						</li>
+					</ul>
+					</div>
+						<div class="form-group">
+							<div class="col-md-9 col-md-offset-4">
+								<a ng-href="#/projects" class="btn btn-primary">
+									<i class="glyphicon glyphicon-sign-in"></i>
+									Voltar
+								</a>
+								<button class="btn btn-danger" ng-click="remove()">
+									<i class="glyphicon glyphicon-sign-in"></i>
+									Excluir
+								</button>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

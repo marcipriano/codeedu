@@ -16,7 +16,7 @@ class Project extends Model implements Transformable
         'name',
         'description',
         'progress',
-    	'staus',
+    	'status',
     	'due_date'
 	];
 

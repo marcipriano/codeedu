@@ -19,10 +19,10 @@ class CreateProjectTable extends Migration
             $table->integer('owner_id')->unsigned();
             $table->foreign('owner_id')->references('id')->on('users');
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->string('progress');
             $table->integer('status');
-            $table->dateTime('due_date');
+            $table->date('due_date');
             $table->timestamps();
 
             

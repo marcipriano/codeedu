@@ -25,6 +25,11 @@ class ProjectTaskTransformer extends TransformerAbstract
 
             /* place your other model properties here */
 
+            'name' => $model->name,
+            'project_id' => $model->project_id,
+            'start_date' => $model->start_date,
+            'due_date' => $model->due_date,
+            'status' => $model->status,
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];

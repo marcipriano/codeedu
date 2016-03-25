@@ -40,6 +40,8 @@ class ProjectNoteController extends Controller
      */
     public function store(Request $request)
     {
+        // echo '<pre>';
+        // var_dump($request->all());
         return $this->service->create($request->all());
     }
 
@@ -51,7 +53,15 @@ class ProjectNoteController extends Controller
      */
     public function show($id, $noteId)
     {
-        return $project = $this->repository->findWhere(['project_id' => $id, 'id' => $noteId]);
+        $r = $this->repository->findWhere(['project_id' => $id, 'id' => $noteId]);
+        if (isset($r['data']) && count($r['data']) == 1) {
+            $r = [
+                'data' => $r['data'][0]
+            ];
+        }
+
+        return $r;
+        
     }
 
     /**
@@ -72,9 +82,10 @@ class ProjectNoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($noteId)
     {
-        return $this->repository->delete($id);
+        $p = $this->repository->delete($noteId);
+        return [$p];
     }
 
 }

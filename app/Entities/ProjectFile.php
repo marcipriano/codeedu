@@ -11,7 +11,7 @@ class ProjectFile extends Model implements Transformable
     use TransformableTrait;
 
     protected $fillable = [
-    	'user_id',
+    	'project_id',
         'name',
         'description',
         'extension'
@@ -25,5 +25,10 @@ class ProjectFile extends Model implements Transformable
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function getFileName()
+    {
+        return $this->id . '.' . $this->extension;
     }
 }

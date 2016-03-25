@@ -60,7 +60,7 @@ class ClientController extends Controller
     public function show($id)
     {
         try {
-            $c = $this->repository->find($id);
+            $c = $this->repository->with(['project'])->find($id);
         
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // something went wrong
@@ -96,6 +96,10 @@ class ClientController extends Controller
             $c = $this->repository->find($id);
             
             foreach ($c->project as $project) {
+                //apagar owner
+                $this->projectRepository->find($project->id)->owner->each(function ($owner) {
+                   $owner->delete();
+                });
                 //apagar members
                 $this->projectRepository->find($project->id)->members->each(function ($member) {
                    $member->delete();

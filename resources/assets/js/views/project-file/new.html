@@ -1,0 +1,87 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-default">
+				<div class="panel-heading">New File</div>
+				<div class="panel-body">
+					
+					<form class="form-horizontal" name="formProjectFile" role="form" method="POST" ng-submit="save()" novalidate>
+						<div class="form-group" ng-class="{'has-error': !formProjectFile.name.$valid && formProjectFile.name.$touched}">
+							<label class="col-md-3 control-label">Name: </label>
+							<div class="col-md-9">
+								<input type="text" 
+									   class="form-control" 
+									   name="name" 
+									   ng-model="projectFile.name" 
+									   required 
+							           ng-minlength="10"
+							           ng-maxlength="150" />
+
+								<div ng-messages="formProjectFile.name.$error" 
+									 ng-show="formProjectFile.name.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message when="minlength, maxlength" 
+									   class="help-block">
+										Campo com min. de 10 e max. 150 caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProjectFile.file.$valid && formProjectFile.file.$touched}">
+							<label class="col-md-3 control-label"></label>
+							<div class="col-md-9">
+								
+								<div 	class="btn btn-warning btn-md" 
+										ngf-select 
+										ng-model="projectFile.file" 
+										name="file">
+										<i class="glyphicon glyphicon-upload"></i>
+								    	Selecione um Arquivo
+								</div>
+								{{projectFile.file.name}}
+								<div ng-messages="formProjectFile.file.$error" 
+									 ng-show="formProjectFile.file.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProjectFile.description.$valid && formProjectFile.description.$touched}">
+							<label class="col-md-3 control-label">Description: </label>
+							<div class="col-md-9">
+								<textarea class="form-control" name="description" ng-model="projectFile.description" required></textarea> 
+								<div ng-messages="formProjectFile.description.$error" ng-show="formProjectFile.description.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-9 col-md-offset-2">
+								<a ng-href="#/projects/{{idProject}}" type="submit" class="btn btn-primary">
+									<i class="glyphicon glyphicon-file"></i>
+									Voltar para Projetc
+								</a>
+								<a ng-href="#/project/{{idProject}}/files" type="submit" class="btn btn-primary">
+									<i class="glyphicon glyphicon-circle-arrow-left"></i>
+									Voltar para Files do project
+								</a>
+								<button type="submit" class="btn btn-success" ng-disabled="formProjectFile.$invalid">
+									<i class="glyphicon glyphicon-ok-circle"></i>
+									Salvar
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

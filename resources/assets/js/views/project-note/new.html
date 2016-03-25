@@ -1,0 +1,66 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-default">
+				<div class="panel-heading">New Note</div>
+				<div class="panel-body">
+					
+					<form class="form-horizontal" name="formProjectNote" role="form" method="POST" ng-submit="save()" novalidate>
+						<div class="form-group" ng-class="{'has-error': !formProjectNote.title.$valid && formProjectNote.title.$touched}">
+							<label class="col-md-3 control-label">Title: </label>
+							<div class="col-md-9">
+								<input type="text" 
+									   class="form-control" 
+									   name="title" 
+									   ng-model="projectNote.title" 
+									   required 
+							           ng-minlength="10"
+							           ng-maxlength="150" />
+
+								<div ng-messages="formProjectNote.title.$error" 
+									 ng-show="formProjectNote.title.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+									<p ng-message when="minlength, maxlength" 
+									   class="help-block">
+										Campo com min. de 10 e max. 150 caracteres
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" ng-class="{'has-error': !formProjectNote.address.$valid && formProjectNote.address.$touched}">
+							<label class="col-md-3 control-label">Note: </label>
+							<div class="col-md-9">
+								<textarea class="form-control" name="note" ng-model="projectNote.note" required></textarea> 
+								<div ng-messages="formProjectNote.note.$error" ng-show="formProjectNote.note.$touched"> 
+									<p ng-message="required" class="help-block">
+										Campo Obrigatrio
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-9 col-md-offset-2">
+								<a ng-href="#/projects/{{idProject}}" type="submit" class="btn btn-primary">
+									<i class="glyphicon glyphicon-file"></i>
+									Voltar para Projetc
+								</a>
+								<a ng-href="#/project/{{idProject}}/notes" type="submit" class="btn btn-primary">
+									<i class="glyphicon glyphicon-circle-arrow-left"></i>
+									Voltar para notas do project
+								</a>
+								<button type="submit" class="btn btn-success" ng-disabled="formProjectNote.$invalid">
+									<i class="glyphicon glyphicon-ok-circle"></i>
+									Salvar
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
