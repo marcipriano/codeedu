@@ -94,37 +94,41 @@ class ClientController extends Controller
         
         try {
             $c = $this->repository->find($id);
-            
-            foreach ($c->project as $project) {
-                //apagar owner
-                $this->projectRepository->find($project->id)->owner->each(function ($owner) {
-                   $owner->delete();
-                });
-                //apagar members
-                $this->projectRepository->find($project->id)->members->each(function ($member) {
-                   $member->delete();
-                });
 
-                //apagar tasks
-                $this->projectRepository->find($project->id)->tasks->each(function ($task) {
-                   $task->delete();
-                });
+            //verifica se existe projeto relacionado com o client
+            if (!is_null($c->project)) {
 
-                //apagar notas
-                $this->projectRepository->find($project->id)->notes->each(function ($note) {
-                   $note->delete();
-                });
+                foreach ($c->project as $project) {
+                    //apagar owner
+                    $this->projectRepository->find($project->id)->owner->each(function ($owner) {
+                       $owner->delete();
+                    });
+                    //apagar members
+                    $this->projectRepository->find($project->id)->members->each(function ($member) {
+                       $member->delete();
+                    });
 
-                //apagar files
-                $this->projectRepository->find($project->id)->files->each(function ($file) {
-                   $file->delete();
-                });
+                    //apagar tasks
+                    $this->projectRepository->find($project->id)->tasks->each(function ($task) {
+                       $task->delete();
+                    });
 
-                //apagar projetos
-                $this->repository->find($id)->project->each(function ($project) {
-                   $project->delete();
-                });
+                    //apagar notas
+                    $this->projectRepository->find($project->id)->notes->each(function ($note) {
+                       $note->delete();
+                    });
 
+                    //apagar files
+                    $this->projectRepository->find($project->id)->files->each(function ($file) {
+                       $file->delete();
+                    });
+
+                    //apagar projetos
+                    $this->repository->find($id)->project->each(function ($project) {
+                       $project->delete();
+                    });
+
+                }
             }
             
             try {
